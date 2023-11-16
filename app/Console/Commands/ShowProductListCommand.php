@@ -11,7 +11,7 @@ class ShowProductListCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'show-product-list';
+    protected $signature = 'show-product-list {--url=}';
 
     /**
      * The console command description.
