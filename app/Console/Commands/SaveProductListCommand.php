@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\ScraperProductsService;
 use Illuminate\Console\Command;
 
 class SaveProductListCommand extends Command
@@ -23,7 +24,7 @@ class SaveProductListCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(ScraperProductsService $scraper)
     {
         //
     }
