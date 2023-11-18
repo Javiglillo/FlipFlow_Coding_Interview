@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\ScraperProductsService;
+use Exception;
 use Illuminate\Console\Command;
 
 class SaveProductListCommand extends Command
@@ -29,7 +30,8 @@ class SaveProductListCommand extends Command
         $url = $this->option('url');
         
         if($url){
-            $scraper->getProducts($url, 'save');
+                $result = $scraper->getProducts($url, 'save');
+                $result === true ? $this->info('Products stored correctly') : $this->error('Products could not be stored');
         }
         else{
             $this->error('You must provide the --url param');

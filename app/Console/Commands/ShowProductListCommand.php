@@ -29,7 +29,8 @@ class ShowProductListCommand extends Command
         $url = $this->option('url');
         
         if($url){
-            $scraper->getProducts($url, 'show');
+            $result = $scraper->getProducts($url, 'show');
+            $result === true ? $this->info('Products showed correctly') : $this->error('Products could not be showed');
         }
         else{
             $this->error('You must provide the --url param');

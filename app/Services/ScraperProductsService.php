@@ -34,15 +34,21 @@ class ScraperProductsService {
                     $product->url = $basePath . $productNode->filter('.product-card__media > a')->attr('href');
                     $products[] = $product->toArray();
                 });
-        
-                if($action === 'save'){
-                    $this->productService->saveProducts($products);
-                } elseif ($action === 'show'){
-                    $this->productService->showProducts($products);
+                
+                if(count($products) > 0){
+                    if($action === 'save'){
+                        $this->productService->saveProducts($products);
+                        return true;
+                    } elseif ($action === 'show'){
+                        $this->productService->showProducts($products);
+                        return true;
+                    }
                 }
             }
-        } catch(Exception $e){
-            echo 'Caught exception: ' . $e->getMessage() . PHP_EOL . 'This may be because the url provided is not correct';
+            return false;
+        } catch (Exception $e){
+            echo 'Caught exception: ' . $e->getMessage() . PHP_EOL;
+            return false;
         }
 
     }
