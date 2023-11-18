@@ -26,6 +26,13 @@ class ShowProductListCommand extends Command
      */
     public function handle(ScraperProductsService $scraper)
     {
-        //
+        $url = $this->option('url');
+        
+        if($url){
+            $scraper->showProducts($url);
+        }
+        else{
+            $this->error('You must provide the --url param');
+        }
     }
 }

@@ -36,4 +36,9 @@ class ScraperProductsService {
         $products = $this->getProducts($url);
         Product::insert($products);
     }
+
+    public function showProducts($url) {
+        $products = $this->getProducts($url);
+        echo json_encode($products, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
 }
