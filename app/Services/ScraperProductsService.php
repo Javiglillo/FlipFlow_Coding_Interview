@@ -8,8 +8,10 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\DomCrawler\Crawler;
 
 class ScraperProductsService {
+
+    public function __construct(private ProductService $productService){}
     
-    public function getProducts($url){
+    public function getProducts($url, $action){
         $browser = new HttpBrowser(HttpClient::create());
         $browser->request('GET', $url);
         $response = $browser->getResponse();
@@ -29,16 +31,10 @@ class ScraperProductsService {
             $products[] = $product->toArray();
         });
 
-        return $products;
-    }
-
-    public function saveProducts($url){
-        $products = $this->getProducts($url);
-        Product::insert($products);
-    }
-
-    public function showProducts($url) {
-        $products = $this->getProducts($url);
-        echo json_encode($products, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if($action === 'save'){
+            $this->productService->saveProducts($products);
+        } elseif ($action === 'show'){
+            $this->productService->showProducts($products);
+        }
     }
 }

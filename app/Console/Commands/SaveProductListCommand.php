@@ -29,7 +29,7 @@ class SaveProductListCommand extends Command
         $url = $this->option('url');
         
         if($url){
-            $scraper->saveProducts($url);
+            $scraper->getProducts($url, 'save');
         }
         else{
             $this->error('You must provide the --url param');

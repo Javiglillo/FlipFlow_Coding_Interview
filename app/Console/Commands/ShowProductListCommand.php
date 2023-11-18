@@ -29,7 +29,7 @@ class ShowProductListCommand extends Command
         $url = $this->option('url');
         
         if($url){
-            $scraper->showProducts($url);
+            $scraper->getProducts($url, 'show');
         }
         else{
             $this->error('You must provide the --url param');
