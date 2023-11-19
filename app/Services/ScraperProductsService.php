@@ -12,7 +12,8 @@ class ScraperProductsService {
 
     public function __construct(private ProductService $productService){}
     
-    public function getProducts($url, $action){
+    public function getProducts($url, $action): bool
+    {
         try{
             $browser = new HttpBrowser(HttpClient::create());
             $browser->request('GET', $url);
