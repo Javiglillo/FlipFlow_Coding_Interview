@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Services\ScraperProductsService;
-use Exception;
 use Illuminate\Console\Command;
 
 class SaveProductListCommand extends Command
