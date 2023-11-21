@@ -6,6 +6,7 @@ use App\Models\Product;
 use Exception;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
 
 class ScraperProductsService {
@@ -17,6 +18,18 @@ class ScraperProductsService {
         try{
             $browser = new HttpBrowser(HttpClient::create());
             $browser->request('GET', $url);
+            $newDriveCookie = new Cookie(
+                'salepoint',
+                '005212|4700003||DRIVE|1',
+                time() + 3600,
+                '/',
+                'carrefour.es'
+            );
+
+            $browser->getCookieJar()->set($newDriveCookie);
+            var_dump($browser->getCookieJar());
+            $browser->request('GET', $url);
+
             $response = $browser->getResponse();
 
             if($response->getStatusCode() === 200){
