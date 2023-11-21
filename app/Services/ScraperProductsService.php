@@ -13,21 +13,45 @@ class ScraperProductsService {
 
     public function __construct(private ProductService $productService){}
     
+    public function getDeliveryAddressDetails(): object
+    {
+        $deliveryAddress = 'Drive Peatón MK Quevedo';
+        $browser = new HttpBrowser(HttpClient::create());
+        $browser->request('GET', 'https://www.carrefour.es/cloud-api/salepoints/v1/drives');
+
+        $response = $browser->getResponse();
+        $content = $response->getContent();
+        $contentJSON = json_decode($content, false);
+
+        $salePoints = array_map(function($group) {
+            return $group->sale_points;
+        }, $contentJSON->groups);
+
+        $salePoints = array_merge(...$salePoints);
+
+        $driveQuevedo = array_filter($salePoints, function($salePoint) use ($deliveryAddress) {
+            return $salePoint->name === $deliveryAddress;
+        });
+
+        return array_values($driveQuevedo)[0];
+    }
+
     public function getProducts($url, $action): bool
     {
         try{
+            $deliveryAddressDetails = $this->getDeliveryAddressDetails();
             $browser = new HttpBrowser(HttpClient::create());
             $browser->request('GET', $url);
+
             $newDriveCookie = new Cookie(
                 'salepoint',
-                '005212|4700003||DRIVE|1',
+                $deliveryAddressDetails->sale_point_id . '|' . $deliveryAddressDetails->store_id . '||DRIVE|1',
                 time() + 3600,
                 '/',
                 'carrefour.es'
             );
 
             $browser->getCookieJar()->set($newDriveCookie);
-            var_dump($browser->getCookieJar());
             $browser->request('GET', $url);
 
             $response = $browser->getResponse();
